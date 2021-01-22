@@ -8,3 +8,8 @@ Se usara un proyecto con NPM como servidor, porque tratamos de usar Apache, pero
 Finalmente para la animacion se realizara se estara haciendo movimientos con la computadora que este en el cuarto. 
 
 El archivo index.html se encuentra en public al igual que el archivo cliente de js con Three.js
+
+Una vez clonado,
+```
+npm start
+```
