@@ -6,3 +6,5 @@ Después de trabajar en varios proyectos para iOS, decidimos inspirarnos en ello
 Se usara un proyecto con NPM como servidor, porque tratamos de usar Apache, pero por motivos de Three.js, no permite carga de archivos locales y necesita un servidor y el que mejor se ajusta para pruebas es npm.
 
 Finalmente para la animacion se realizara se estara haciendo movimientos con la computadora que este en el cuarto. 
+
+El archivo index.html se encuentra en public al igual que el archivo cliente de js con Three.js
