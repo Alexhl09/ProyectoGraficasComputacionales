@@ -1,0 +1,16 @@
+{
+  "name": "graficas",
+  "version": "1.0.0",
+  "description": "Proyecto para el desarrollo de escenas con WebGL y ThreeJS",
+  "main": "app.js",
+  "scripts": {
+    "start" : "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "three": "^0.124.0"
+  }
+}
