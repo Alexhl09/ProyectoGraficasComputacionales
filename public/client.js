@@ -205,7 +205,7 @@ for(var j = 0;j <5;j++){
 const height = 10;
 const intensity = 1;
 const rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
-rectLight.position.set( 30, 20, -40 );
+rectLight.position.set( 40, 20, -40 );
 rectLight.rotation.x = Math.PI/2;
 rectLight.position.z += j * 20;
 rectLight.position.x -= i * 20;
