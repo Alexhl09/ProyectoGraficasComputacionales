@@ -11,5 +11,6 @@ El archivo index.html se encuentra en public al igual que el archivo cliente de 
 
 Una vez clonado,
 ```
+npm install
 npm start
 ```
