@@ -1,8 +1,11 @@
 import * as THREE from '/build/three.module.js';
+  
 import { RectAreaLightHelper } from '/jsm/helpers/RectAreaLightHelper.js';
 import { RectAreaLightUniformsLib } from '/jsm/lights/RectAreaLightUniformsLib.js';
 import {OrbitControls} from '/jsm/controls/OrbitControls.js';
 import Stats from '/jsm/libs/stats.module.js';
+import {OBJLoader} from '/jsm/loaders/OBJLoader.js';
+import {MTLLoader} from '/jsm/loaders/MTLLoader.js';
 
 const scene = new THREE.Scene();
 
@@ -104,9 +107,9 @@ exterior.add( walls[i] );
 }
 
 // LUZ
-var spot1 = new THREE.SpotLight(0xfafafa);
-spot1.position.set(20, 50, 30);
-exterior.add(spot1);
+// var spot1 = new THREE.SpotLight(0xfafafa);
+// spot1.position.set(20, 50, 30);
+// exterior.add(spot1);
 
 var animate = function () {
     requestAnimationFrame(animate);
@@ -182,10 +185,13 @@ for(var i = 0; i<2; i++){
 const screenGeometry = new THREE.PlaneGeometry( 80, 8, 48 );
 screenGeometry.widthSegments = 2;
 screenGeometry.heightSegments = 2;
-const screenMaterial = new THREE.MeshBasicMaterial( {color: 0xbaffaa, side: THREE.DoubleSide, wireframe: true} );
+var texture = new THREE.TextureLoader().load( 'textures/banner.jpg' );
+texture.repeat.set(2, 1);
+const screenMaterial = new THREE.MeshBasicMaterial( {map: texture, side: THREE.OneSide, wireframe: false} );
 const screenObject = new THREE.Mesh( screenGeometry, screenMaterial );
 screenObject.rotation.x = Math.PI;
-screenObject.rotation.y = Math.PI/2;
+screenObject.rotation.z =  Math.PI;
+screenObject.rotation.y = (i % 2 == false) ? Math.PI/2 :  (Math.PI * 3)/2;
 screenObject.position.y = 10;
 screenObject.position.x = -50 + (i*100);
 screenObject.position.z = 0;
@@ -211,6 +217,12 @@ rectLight.position.z += j * 20;
 rectLight.position.x -= i * 20;
 rectLight.rotation.y = Math.PI;
 lamparas[i] = rectLight;
+const light = new THREE.DirectionalLight( 0xFFffff, 0.05);
+light.position.set( 40, 20, -40 )
+light.position.z += j * 20;
+light.position.x -= i * 20;
+exterior.add( light );
+
 exterior.add( lamparas[i] )
 
 const rectLightHelper = new RectAreaLightHelper( rectLight );
@@ -219,9 +231,107 @@ rectLight.add( rectLightHelper );
 }
 
 
+// Mesa
+const mesa = new THREE.Object3D();
+const tableGeometry = new THREE.BoxGeometry(9, 1, 20, 8);
+var tableTexture = new THREE.TextureLoader().load( 'floorTexture.jpeg' );
+const tableMaterial = new THREE.MeshLambertMaterial({
+    map : tableTexture,
+    wireframe: false
+});
+const table = new THREE.Mesh(tableGeometry, tableMaterial);
+table.receiveShadow = true;
+table.position.y = 4;
+mesa.add(table);
 
+var patasMesa = []
+for(var i = 0; i < 4;i < i++){
+    const pataGeometry = new THREE.BoxGeometry(1, 4, 1, 5);
+    var tableTexture = new THREE.TextureLoader().load( 'floorTexture.jpeg' );
+    const pataMaterial = new THREE.MeshLambertMaterial({
+        map : tableTexture,
+        wireframe: false
+    });
+    const pata = new THREE.Mesh(pataGeometry, pataMaterial);
+    pata.receiveShadow = true;
+    pata.position.y = 2;
+    pata.position.x += (i < 2) ? -4 : 4 
+    pata.position.z = (i % 2 == true) ? 9.5 : -9.5
+    patasMesa[i] = pata;
+    mesa.add(patasMesa[i]);
+}
+
+//mesa.position.x = 30;
+var mesas = []
+for(var i = -1; i < 2; i++){
+    mesas[i] = [];
+    for(var j = -1; j < 2; j++){
+        var m = mesa.clone()
+        m.position.set(i * 35, 0, j * 23)
+        m.position.z -= 9
+        mesas[i][j] = m
+        scene.add(m);
+    }
+}
+
+// Computadoras mbp
+
+
+var computadoras = []
+var mtlLoader = new MTLLoader();
+mtlLoader.load('/models/mbp/mbp.mtl',function (materials){
+    materials.preload();
+    var objLoader = new OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.load('/models/mbp/mbp.obj', function(object){
+        object.scale.set(0.01,0.01,0.01);
+        for(var i = -1; i < 1; i++){
+            computadoras[i] = [];
+            for(var j = -2; j < 4; j++){
+                var mbp = object.clone()
+                mbp.position.set(i * 35, 0, j * 11)
+                mbp.position.z -= 14
+                mbp.position.x += 2
+                mbp.position.y = 4.5
+                mbp.rotation.y = Math.PI /2;
+                computadoras[i][j] = mbp
+                scene.add(mbp);
+            }
+        }
+        //scene.add(object);
+    })
+})
+
+
+// Computadoras mbp
+
+var computadorasMac = []
+var mtlLoader = new MTLLoader();
+mtlLoader.load('/models/mac/mpm_f18__Apple_iMac_27.mtl',function (materials){
+    materials.preload();
+    var objLoader = new OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.load('/models/mac/mpm_f18__Apple_iMac_27.obj', function(object){
+        object.scale.set(0.01,0.01,0.01);
+        for(var i = -1; i < 1; i++){
+            computadorasMac[i] = [];
+            for(var j = -2; j < 4; j++){
+                var mac = object.clone()
+                mac.position.set(i * 35, 0, j * 11)
+                mac.position.z -= 14
+                mac.position.x -= 2
+                mac.position.y = 4.5
+                mac.rotation.y = Math.PI * 3.5;
+                computadorasMac[i][j] = mac
+                scene.add(mac);
+            }
+        }
+        //scene.add(object);
+    })
+})
 
 scene.add(exterior);
+//scene.add(mesa);
 function render() {
     renderer.render(scene, camera);
 }
