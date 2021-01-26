@@ -200,6 +200,21 @@ exterior.add( screens[i] );
 }
 
 
+const backScreenGeometry = new THREE.PlaneGeometry( 30, 8, 10 );
+backScreenGeometry.widthSegments = 2;
+backScreenGeometry.heightSegments = 2;
+var screenTexture = new THREE.TextureLoader().load( 'textures/apple.jpg' );
+screenTexture.repeat.set(1.7,1);
+const backScreenMaterial = new THREE.MeshBasicMaterial( {map: screenTexture, wireframe: false} );
+const backScreen = new THREE.Mesh( backScreenGeometry, backScreenMaterial );
+backScreen.rotation.x = Math.PI;
+backScreen.rotation.y = Math.PI*2;
+backScreen.rotation.z = Math.PI;
+backScreen.position.y = 10;
+backScreen.position.z = 50;
+exterior.add( backScreen);
+
+
 
 
 // Lamparas techo
@@ -228,6 +243,25 @@ exterior.add( lamparas[i] )
 const rectLightHelper = new RectAreaLightHelper( rectLight );
 rectLight.add( rectLightHelper );
 }
+}
+
+
+// Mesa
+var stant = [];
+for(var i = 0; i < 2;i++){
+    const geometry = new THREE.BoxGeometry(4, 1, 60, 8);
+    var texture = new THREE.TextureLoader().load( 'floorTexture.jpeg' );
+    texture.repeat.set(1,30);
+    const material = new THREE.MeshLambertMaterial({
+    map : texture,
+    wireframe: false
+    });
+    const tabla = new THREE.Mesh(geometry, material);
+    tabla.receiveShadow = true;
+    tabla.position.y = 4;
+    tabla.position.x = (i % 2 == true) ? 48 : -48;
+    stant[i] = tabla;
+    exterior.add(stant[i]);
 }
 
 
@@ -267,7 +301,7 @@ for(var i = -1; i < 2; i++){
     mesas[i] = [];
     for(var j = -1; j < 2; j++){
         var m = mesa.clone()
-        m.position.set(i * 35, 0, j * 23)
+        m.position.set(i * 32, 0, j * 23)
         m.position.z -= 9
         mesas[i][j] = m
         scene.add(m);
@@ -285,11 +319,11 @@ mtlLoader.load('/models/mbp/mbp.mtl',function (materials){
     objLoader.setMaterials(materials);
     objLoader.load('/models/mbp/mbp.obj', function(object){
         object.scale.set(0.01,0.01,0.01);
-        for(var i = -1; i < 1; i++){
+        for(var i = -1; i < 2; i++){
             computadoras[i] = [];
             for(var j = -2; j < 4; j++){
                 var mbp = object.clone()
-                mbp.position.set(i * 35, 0, j * 11)
+                mbp.position.set(i * 32, 0, j * 11)
                 mbp.position.z -= 14
                 mbp.position.x += 2
                 mbp.position.y = 4.5
@@ -313,11 +347,11 @@ mtlLoader.load('/models/mac/mpm_f18__Apple_iMac_27.mtl',function (materials){
     objLoader.setMaterials(materials);
     objLoader.load('/models/mac/mpm_f18__Apple_iMac_27.obj', function(object){
         object.scale.set(0.01,0.01,0.01);
-        for(var i = -1; i < 1; i++){
+        for(var i = -1; i < 2; i++){
             computadorasMac[i] = [];
             for(var j = -2; j < 4; j++){
                 var mac = object.clone()
-                mac.position.set(i * 35, 0, j * 11)
+                mac.position.set(i * 32, 0, j * 11)
                 mac.position.z -= 14
                 mac.position.x -= 2
                 mac.position.y = 4.5
@@ -325,6 +359,49 @@ mtlLoader.load('/models/mac/mpm_f18__Apple_iMac_27.mtl',function (materials){
                 computadorasMac[i][j] = mac
                 scene.add(mac);
             }
+        }
+        //scene.add(object);
+    })
+})
+
+var iphones = []
+var mtlLoader = new MTLLoader();
+mtlLoader.load('/models/iphone/mpm_f10__Apple_iPhone_4.mtl',function (materials){
+    materials.preload();
+    var objLoader = new OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.load('/models/iphone/mpm_f10__Apple_iPhone_4.obj', function(object){
+        object.scale.set(0.01,0.01,0.01);
+        for(var i = -4; i < 5; i++){
+            var phone = object.clone()
+                phone.position.set(48, 4.5, 0)
+                phone.position.z += 6 * i
+                phone.rotation.y = Math.PI * 3.5;
+                iphones[i] = phone
+                scene.add(phone);
+        }
+        //scene.add(object);
+    })
+})
+
+var ipads = []
+var mtlLoader = new MTLLoader();
+mtlLoader.load('/models/ipad/mpm_f20__Apple_iPad_2.mtl',function (materials){
+    materials.preload();
+    var objLoader = new OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.load('/models/ipad/mpm_f20__Apple_iPad_2.obj', function(object){
+        object.scale.set(0.01,0.01,0.01);
+        for(var i = -2; i < 3; i++){
+            var ipad = object.clone()
+            ipad.position.set(-48, 5.5, 0)
+            ipad.position.z += 12 * i
+            ipad.rotation.y = Math.PI*2.3;
+            ipad.rotation.z = (Math.PI*3)/2;
+            ipad.rotation.x = Math.PI/2;
+
+                ipads[i] = ipad
+                scene.add(ipad);
         }
         //scene.add(object);
     })
