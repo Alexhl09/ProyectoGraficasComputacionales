@@ -3,6 +3,7 @@ import * as THREE from '/build/three.module.js';
 import { RectAreaLightHelper } from '/jsm/helpers/RectAreaLightHelper.js';
 import { RectAreaLightUniformsLib } from '/jsm/lights/RectAreaLightUniformsLib.js';
 import {OrbitControls} from '/jsm/controls/OrbitControls.js';
+import {FirstPersonControls} from '/jsm/controls/FirstPersonControls.js';
 import Stats from '/jsm/libs/stats.module.js';
 import {OBJLoader} from '/jsm/loaders/OBJLoader.js';
 import {MTLLoader} from '/jsm/loaders/MTLLoader.js';
@@ -10,40 +11,32 @@ import {MTLLoader} from '/jsm/loaders/MTLLoader.js';
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.x = 17;
-camera.position.y = 12;
-camera.position.z = 13;
-camera.position.z = 13;
+camera.position.x = 0;
+camera.position.y = 10;
+camera.position.z = -80;
 camera.lookAt(scene.position);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-
+//renderer.shadowMap.enabled = true;
 RectAreaLightUniformsLib.init();
-const controls = new OrbitControls(camera, renderer.domElement);
 
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    render();
-}, false);
 
 const stats = Stats();
 document.body.appendChild(stats.dom);
 
 
 
-const geometry = new THREE.BoxGeometry();
-var texture = new THREE.TextureLoader().load( 'floorTexture.jpeg' );
-const material = new THREE.MeshLambertMaterial({
-    map: texture,
-    wireframe: false
-});
-const cube = new THREE.Mesh(geometry, material);
-cube.receiveShadow = true;
-scene.add(cube);
+// const geometry = new THREE.BoxGeometry();
+// var texture = new THREE.TextureLoader().load( 'textures/floorTexture.jpeg' );
+// const material = new THREE.MeshLambertMaterial({
+//     map: texture,
+//     wireframe: false
+// });
+// const cube = new THREE.Mesh(geometry, material);
+// cube.receiveShadow = true;
+// scene.add(cube);
 
 const exterior = new THREE.Object3D();
 
@@ -53,10 +46,16 @@ const exterior = new THREE.Object3D();
 const floorGeometry = new THREE.PlaneGeometry( 100, 100, 32 );
 floorGeometry.widthSegments = 2;
 floorGeometry.heightSegments = 2;
-const floorMaterial = new THREE.MeshBasicMaterial( {color: 0xff69b4, side: THREE.DoubleSide, wireframe: true} );
+var floorTexture = new THREE.TextureLoader().load( 'textures/whiteFloor.jpg' );
+floorTexture.wrapS = THREE.RepeatWrapping;
+floorTexture.wrapT = THREE.RepeatWrapping;
+floorTexture.repeat.set(8,8);
+const floorMaterial = new THREE.MeshBasicMaterial( {map: floorTexture, wireframe: false} );
 const floor = new THREE.Mesh( floorGeometry, floorMaterial );
-floor.rotation.x = Math.PI / 2;
+floor.rotation.x = Math.PI/2;
+floor.rotation.y = Math.PI;
 floor.position.y = 0;
+floor.receiveShadow = true;
 exterior.add( floor );
 
 
@@ -65,7 +64,11 @@ exterior.add( floor );
 const ceilingGeometry = new THREE.PlaneGeometry( 100, 100, 32 );
 ceilingGeometry.widthSegments = 2;
 ceilingGeometry.heightSegments = 2;
-const ceilingMaterial = new THREE.MeshBasicMaterial( {color: 0xff69b4, side: THREE.DoubleSide, wireframe: true} );
+var ceilingTexture = new THREE.TextureLoader().load( 'textures/silver.jpg' );
+ceilingTexture.wrapS = THREE.RepeatWrapping;
+ceilingTexture.wrapT = THREE.RepeatWrapping;
+ceilingTexture.repeat.set(10,4);
+const ceilingMaterial = new THREE.MeshBasicMaterial( {map: ceilingTexture, side: THREE.DoubleSide, wireframe: false} );
 const ceiling = new THREE.Mesh( ceilingGeometry, ceilingMaterial );
 ceiling.rotation.x = Math.PI / 2;
 ceiling.position.y = 20;
@@ -81,7 +84,11 @@ for(var i = 0; i<3; i++){
 const wallGeometry = new THREE.PlaneGeometry( 20, 100, 32 );
 wallGeometry.widthSegments = 2;
 wallGeometry.heightSegments = 2;
-const wallMaterial = new THREE.MeshBasicMaterial( {color: 0xff69b4, side: THREE.DoubleSide, wireframe: true} );
+var wallTexture = new THREE.TextureLoader().load( 'textures/silver.jpg' );
+wallTexture.wrapS = THREE.RepeatWrapping;
+wallTexture.wrapT = THREE.RepeatWrapping;
+wallTexture.repeat.set(10,4);
+const wallMaterial = new THREE.MeshBasicMaterial( {map: wallTexture, side: THREE.DoubleSide, wireframe: false} );
 const wall = new THREE.Mesh( wallGeometry, wallMaterial );
 wall.rotation.x = Math.PI / 2;
 wall.rotation.y = Math.PI / 2;
@@ -111,10 +118,20 @@ exterior.add( walls[i] );
 // spot1.position.set(20, 50, 30);
 // exterior.add(spot1);
 
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    render();
+}, false);
+
 var animate = function () {
     requestAnimationFrame(animate);
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    // cube.rotation.x += 0.01;
+    // cube.rotation.y += 0.01;
     controls.update();
     render();
     stats.update();
@@ -129,7 +146,7 @@ for(var i = 0; i<2; i++){
 const windowGeometry = new THREE.PlaneGeometry( 20, 20, 32 );
 windowGeometry.widthSegments = 2;
 windowGeometry.heightSegments = 2;
-const windowGMaterial = new THREE.MeshBasicMaterial( {color: 0xb569ff, side: THREE.DoubleSide, wireframe: true} );
+const windowGMaterial = new THREE.MeshBasicMaterial( {color: 0xe1ebe3, side: THREE.DoubleSide, wireframe: false, opacity: 0.2, transparent: true} );
 const windowObject = new THREE.Mesh( windowGeometry, windowGMaterial );
 windowObject.rotation.x = Math.PI;
 windowObject.rotation.y = Math.PI;
@@ -150,7 +167,7 @@ for(var i = 0; i<2; i++){
 const windowGeometry = new THREE.PlaneGeometry( 20, 20, 32 );
 windowGeometry.widthSegments = 2;
 windowGeometry.heightSegments = 2;
-const windowGMaterial = new THREE.MeshBasicMaterial( {color: 0xb569ff, side: THREE.DoubleSide, wireframe: true} );
+const windowGMaterial = new THREE.MeshBasicMaterial( {color: 0xe1ebe3, side: THREE.DoubleSide, wireframe: false, opacity: 0.2, transparent: true} );
 const windowObject = new THREE.Mesh( windowGeometry, windowGMaterial );
 windowObject.rotation.x = Math.PI;
 windowObject.rotation.y = Math.PI;
@@ -167,7 +184,7 @@ exterior.add( windowsRight[i] );
 const windowUpGeometry = new THREE.PlaneGeometry( 8, 20, 10 );
 windowUpGeometry.widthSegments = 2;
 windowUpGeometry.heightSegments = 2;
-const windowUpGaterial = new THREE.MeshBasicMaterial( {color: 0xb569ff, side: THREE.DoubleSide, wireframe: true} );
+const windowUpGaterial = new THREE.MeshBasicMaterial( {color: 0xe1ebe3, side: THREE.DoubleSide, wireframe: false, opacity: 0.2, transparent: true} );
 const windowUpObject = new THREE.Mesh( windowUpGeometry, windowUpGaterial );
 windowUpObject.rotation.x = Math.PI;
 windowUpObject.rotation.y = Math.PI;
@@ -187,13 +204,13 @@ screenGeometry.widthSegments = 2;
 screenGeometry.heightSegments = 2;
 var texture = new THREE.TextureLoader().load( 'textures/banner.jpg' );
 texture.repeat.set(2, 1);
-const screenMaterial = new THREE.MeshBasicMaterial( {map: texture, side: THREE.OneSide, wireframe: false} );
+const screenMaterial = new THREE.MeshBasicMaterial( {map: texture, side: THREE.DoubleSide, wireframe: false} );
 const screenObject = new THREE.Mesh( screenGeometry, screenMaterial );
 screenObject.rotation.x = Math.PI;
 screenObject.rotation.z =  Math.PI;
 screenObject.rotation.y = (i % 2 == false) ? Math.PI/2 :  (Math.PI * 3)/2;
 screenObject.position.y = 10;
-screenObject.position.x = -50 + (i*100);
+screenObject.position.x = (i % 2 == false) ? -49.85 : 49.85
 screenObject.position.z = 0;
 screens[i] = screenObject;
 exterior.add( screens[i] );
@@ -211,7 +228,7 @@ backScreen.rotation.x = Math.PI;
 backScreen.rotation.y = Math.PI*2;
 backScreen.rotation.z = Math.PI;
 backScreen.position.y = 10;
-backScreen.position.z = 50;
+backScreen.position.z = 49.8;
 exterior.add( backScreen);
 
 
@@ -226,7 +243,7 @@ for(var j = 0;j <5;j++){
 const height = 10;
 const intensity = 1;
 const rectLight = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
-rectLight.position.set( 40, 20, -40 );
+rectLight.position.set( 40, 19.8, -40 );
 rectLight.rotation.x = Math.PI/2;
 rectLight.position.z += j * 20;
 rectLight.position.x -= i * 20;
@@ -237,7 +254,7 @@ light.position.set( 40, 20, -40 )
 light.position.z += j * 20;
 light.position.x -= i * 20;
 exterior.add( light );
-
+light.castShadow = true;
 exterior.add( lamparas[i] )
 
 const rectLightHelper = new RectAreaLightHelper( rectLight );
@@ -250,13 +267,14 @@ rectLight.add( rectLightHelper );
 var stant = [];
 for(var i = 0; i < 2;i++){
     const geometry = new THREE.BoxGeometry(4, 1, 60, 8);
-    var texture = new THREE.TextureLoader().load( 'floorTexture.jpeg' );
+    var texture = new THREE.TextureLoader().load( 'textures/floorTexture.jpeg' );
     texture.repeat.set(1,30);
     const material = new THREE.MeshLambertMaterial({
     map : texture,
     wireframe: false
     });
     const tabla = new THREE.Mesh(geometry, material);
+    tabla.castShadow = true;
     tabla.receiveShadow = true;
     tabla.position.y = 4;
     tabla.position.x = (i % 2 == true) ? 48 : -48;
@@ -268,7 +286,7 @@ for(var i = 0; i < 2;i++){
 // Mesa
 const mesa = new THREE.Object3D();
 const tableGeometry = new THREE.BoxGeometry(9, 1, 20, 8);
-var tableTexture = new THREE.TextureLoader().load( 'floorTexture.jpeg' );
+var tableTexture = new THREE.TextureLoader().load( 'textures/floorTexture.jpeg' );
 const tableMaterial = new THREE.MeshLambertMaterial({
     map : tableTexture,
     wireframe: false
@@ -281,7 +299,7 @@ mesa.add(table);
 var patasMesa = []
 for(var i = 0; i < 4;i < i++){
     const pataGeometry = new THREE.BoxGeometry(1, 4, 1, 5);
-    var tableTexture = new THREE.TextureLoader().load( 'floorTexture.jpeg' );
+    var tableTexture = new THREE.TextureLoader().load( 'textures/floorTexture.jpeg' );
     const pataMaterial = new THREE.MeshLambertMaterial({
         map : tableTexture,
         wireframe: false
@@ -408,8 +426,21 @@ mtlLoader.load('/models/ipad/mpm_f20__Apple_iPad_2.mtl',function (materials){
 })
 
 scene.add(exterior);
-//scene.add(mesa);
+
+// var cameraControllsFirstPerson = new FirstPersonControls(camera);
+// cameraControllsFirstPerson.lookSpeed = 0.05;
+// cameraControllsFirstPerson.movementSpeed = 10;
+
+var step = 0
+var stepy = 0
+
+var clock = new THREE.Clock();
+
 function render() {
+    // step += 0.005
+    // stepy += 0.00005
+    // var delta = clock.getDelta();
+    // cameraControllsFirstPerson.update(delta);
     renderer.render(scene, camera);
 }
 
