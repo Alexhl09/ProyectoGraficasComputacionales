@@ -49,13 +49,17 @@ loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
 
     gltf.scene.rotation.x = -Math.PI / 2;
     gltf.scene.rotation.y = Math.PI / 2;
-    gltf.scene.position.y = 10;
+
+    // Centrando modelo en la entrada
+    gltf.scene.position.x = -0.5;
+    gltf.scene.position.y = 15;
+    gltf.scene.position.z = -50;
 
     scene.add( gltf.scene );
 
     // Hacer que parezca que emite luz como una lampara
-    // const light = new THREE.PointLight( 0xFFFFFF, 1, 20, 1 );
-    const light = new THREE.PointLight( 0xff0000, 1, 20, 1 );
+    const light = new THREE.PointLight( 0xFFFFFF, 2, 20);
+    // const light = new THREE.PointLight( 0xff0000, 2, 20 );
     light.position.set( gltf.scene.position.x , gltf.scene.position.y, gltf.scene.position.z );
 
     scene.add( light );
