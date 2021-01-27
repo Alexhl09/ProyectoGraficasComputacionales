@@ -7,6 +7,7 @@ import {FirstPersonControls} from '/jsm/controls/FirstPersonControls.js';
 import Stats from '/jsm/libs/stats.module.js';
 import {OBJLoader} from '/jsm/loaders/OBJLoader.js';
 import {MTLLoader} from '/jsm/loaders/MTLLoader.js';
+import { GLTFLoader } from '/jsm/loaders/GLTFLoader.js';
 
 const scene = new THREE.Scene();
 
@@ -39,6 +40,25 @@ document.body.appendChild(stats.dom);
 // scene.add(cube);
 
 const exterior = new THREE.Object3D();
+
+
+// Apple Logo
+const loader = new GLTFLoader();
+
+loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
+
+    gltf.scene.rotation.x = -Math.PI / 2;
+    gltf.scene.rotation.y = Math.PI / 2;
+    gltf.scene.position.y = 10;
+    scene.add( gltf.scene );
+    // console.log("Se cargo el logo");
+
+}, undefined, function ( error ) {
+    console.log("Error cargando logo");
+    console.error( error );
+
+} );
+
 
 
 // Piso
