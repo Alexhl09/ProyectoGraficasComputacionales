@@ -1,3 +1,24 @@
+/**
+ Proyecto de la clase de graficas computacionales del periodo intensivo de invierno 2021.
+ Hecho por Alejandro Hernandez Lopez y Yulisa Medina Maldonado
+
+ El proyecto esta realizado con THREE.JS y con algunos modelos obtenidos de internet, 
+
+ Modelo del iMac de la pagina:
+ https://www.modelplusmodel.com/tech/electronics/f18-desktop-computer.html
+
+ Modelo del Macbook Pro de la pagina:
+ https://www.modelplusmodel.com/tech/electronics/apple-macbook-pro-15.html
+
+ Modelo del iPad de la pagina:
+ https://www.modelplusmodel.com/tech/electronics/apple-ipad-2.html
+
+ Modelo del iPhone de la pagina:
+ https://www.modelplusmodel.com/tech/electronics/f10-phone.html
+
+ */
+
+
 import * as THREE from '/build/three.module.js';
   
 import { RectAreaLightHelper } from '/jsm/helpers/RectAreaLightHelper.js';
@@ -27,17 +48,6 @@ RectAreaLightUniformsLib.init();
 const stats = Stats();
 document.body.appendChild(stats.dom);
 
-
-
-// const geometry = new THREE.BoxGeometry();
-// var texture = new THREE.TextureLoader().load( 'textures/floorTexture.jpeg' );
-// const material = new THREE.MeshLambertMaterial({
-//     map: texture,
-//     wireframe: false
-// });
-// const cube = new THREE.Mesh(geometry, material);
-// cube.receiveShadow = true;
-// scene.add(cube);
 
 const exterior = new THREE.Object3D();
 
@@ -344,7 +354,6 @@ for(var i = 0; i < 4;i < i++){
     mesa.add(patasMesa[i]);
 }
 
-//mesa.position.x = 30;
 var mesas = []
 for(var i = -1; i < 2; i++){
     mesas[i] = [];
@@ -358,7 +367,6 @@ for(var i = -1; i < 2; i++){
 }
 
 // Computadoras mbp
-
 
 var computadoras = []
 var mtlLoader = new MTLLoader();
@@ -452,7 +460,6 @@ mtlLoader.load('/models/ipad/mpm_f20__Apple_iPad_2.mtl',function (materials){
                 ipads[i] = ipad
                 scene.add(ipad);
         }
-        //scene.add(object);
     })
 })
 
