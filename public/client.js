@@ -2,8 +2,9 @@
  Proyecto de la clase de graficas computacionales del periodo intensivo de invierno 2021.
  Hecho por Alejandro Hernandez Lopez y Yulisa Medina Maldonado
 
- El proyecto esta realizado con THREE.JS y con algunos modelos obtenidos de internet, 
-
+ El proyecto esta realizado con THREE.JS y con algunos modelos obtenidos de internet, a excepcion del logo de Apple en la entrada,
+ Ese fue creado con blender para el proyecto.
+ 
  Modelo del iMac de la pagina:
  https://www.modelplusmodel.com/tech/electronics/f18-desktop-computer.html
 
@@ -15,6 +16,24 @@
 
  Modelo del iPhone de la pagina:
  https://www.modelplusmodel.com/tech/electronics/f10-phone.html
+
+ Texturas obtenidas de:
+ whiteFloor:
+ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.123rf.com%2Fphoto_50552654_white-laminate-parquet-floor-texture-background.html&psig=AOvVaw2DZEDpVeRv4HInabEoC6uO&ust=1612213113655000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJidwP-Hx-4CFQAAAAAdAAAAABAD
+
+ floorTexture:
+ https://www.google.com/url?sa=i&url=http%3A%2F%2Fwww.sheridanseating.com%2Fbasketball-floor-texture%2F&psig=AOvVaw28WVxk76Zq1BC4X9JwzNuU&ust=1612213137947000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCIi8y4uIx-4CFQAAAAAdAAAAABAD
+
+ silver:
+ https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.myfreetextures.com%2Fgreat-silver-brushed-metal-texture-background%2F&psig=AOvVaw0D4uVjo4J_dprWKPbou9vk&ust=1612213163805000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCMCwgJqIx-4CFQAAAAAdAAAAABAD
+
+ banner:
+ https://www.google.com/url?sa=i&url=https%3A%2F%2Fsupport.apple.com%2Fes-es%2Fapps&psig=AOvVaw2D2RsmrUxbkCFMAqSf06i_&ust=1612213211981000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPCdwq6Ix-4CFQAAAAAdAAAAABAD
+
+ apple:
+ https://www.google.com/url?sa=i&url=https%3A%2F%2Ffondos.wallpaperstock.net%2Fsimple-white-de-apple-wallpapers_w44562.html&psig=AOvVaw2TQOzNRWf2HUO4gJbMiQ8V&ust=1612213286783000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCOC599aIx-4CFQAAAAAdAAAAABAD
+
+
 
  */
 
