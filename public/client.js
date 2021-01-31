@@ -481,9 +481,9 @@ mtlLoader.load('/models/ipad/mpm_f20__Apple_iPad_2.mtl',function (materials){
 
 scene.add(exterior);
 
-// var cameraControllsFirstPerson = new FirstPersonControls(camera);
-// cameraControllsFirstPerson.lookSpeed = 0.05;
-// cameraControllsFirstPerson.movementSpeed = 10;
+var cameraControllsFirstPerson = new FirstPersonControls(camera);
+cameraControllsFirstPerson.lookSpeed = 0.05;
+cameraControllsFirstPerson.movementSpeed = 10;
 
 var step = 0
 var stepy = 0
@@ -494,22 +494,22 @@ function render() {
     step += 0.005
     stepy += 0.00005
     var delta = clock.getDelta();
-   // cameraControllsFirstPerson.update(delta);
+    cameraControllsFirstPerson.update(delta);
     renderer.render(scene, camera);
 }
 
-const controls = new OrbitControls(camera, renderer.domElement);
+// const controls = new OrbitControls(camera, renderer.domElement);
 
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    render();
-}, false);
+// window.addEventListener('resize', () => {
+//     camera.aspect = window.innerWidth / window.innerHeight;
+//     camera.updateProjectionMatrix();
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+//     render();
+// }, false);
 
 var animate = function () {
     requestAnimationFrame(animate);
-   controls.update();
+   //controls.update();
 
    
    compuQueRota.rotation.y += 0.01;
