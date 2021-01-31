@@ -4,7 +4,7 @@
 
  El proyecto esta realizado con THREE.JS y con algunos modelos obtenidos de internet, a excepcion del logo de Apple en la entrada,
  Ese fue creado con blender para el proyecto.
- 
+
  Modelo del iMac de la pagina:
  https://www.modelplusmodel.com/tech/electronics/f18-desktop-computer.html
 
@@ -177,25 +177,6 @@ exterior.add( walls[i] );
 // var spot1 = new THREE.SpotLight(0xfafafa);
 // spot1.position.set(20, 50, 30);
 // exterior.add(spot1);
-
-
-const controls = new OrbitControls(camera, renderer.domElement);
-
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    render();
-}, false);
-
-var animate = function () {
-    requestAnimationFrame(animate);
-    // cube.rotation.x += 0.01;
-    // cube.rotation.y += 0.01;
-    controls.update();
-    render();
-    stats.update();
-};
 
 
 // Ventanas izquierdas
@@ -385,8 +366,16 @@ for(var i = -1; i < 2; i++){
     }
 }
 
-// Computadoras mbp
+// Mesa principal
+var mesaPrincipal = mesa.clone()
+mesaPrincipal.position.set(0, 0,38)
+mesaPrincipal.rotation.y = Math.PI/2
+scene.add(mesaPrincipal);
 
+
+
+// Computadoras mbp
+var compuQueRota;
 var computadoras = []
 var mtlLoader = new MTLLoader();
 mtlLoader.load('/models/mbp/mbp.mtl',function (materials){
@@ -408,6 +397,9 @@ mtlLoader.load('/models/mbp/mbp.mtl',function (materials){
                 scene.add(mbp);
             }
         }
+        compuQueRota = object.clone()
+        compuQueRota.position.set(0, 4.5,38)
+        scene.add(compuQueRota);
         //scene.add(object);
     })
 })
@@ -436,9 +428,14 @@ mtlLoader.load('/models/mac/mpm_f18__Apple_iMac_27.mtl',function (materials){
                 scene.add(mac);
             }
         }
-        //scene.add(object);
+   
     })
 })
+
+
+
+// Computadora que va a rotar
+
 
 var iphones = []
 var mtlLoader = new MTLLoader();
@@ -494,12 +491,32 @@ var stepy = 0
 var clock = new THREE.Clock();
 
 function render() {
-    // step += 0.005
-    // stepy += 0.00005
-    // var delta = clock.getDelta();
-    // cameraControllsFirstPerson.update(delta);
+    step += 0.005
+    stepy += 0.00005
+    var delta = clock.getDelta();
+   // cameraControllsFirstPerson.update(delta);
     renderer.render(scene, camera);
 }
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    render();
+}, false);
+
+var animate = function () {
+    requestAnimationFrame(animate);
+   controls.update();
+
+   
+   compuQueRota.rotation.y += 0.01;
+    render();
+    stats.update();
+};
+
 
 animate();
 
