@@ -2,8 +2,8 @@
  Proyecto de la clase de graficas computacionales del periodo intensivo de invierno 2021.
  Hecho por Alejandro Hernandez Lopez y Yulisa Medina Maldonado
 
- El proyecto esta realizado con THREE.JS y con algunos modelos obtenidos de internet, a excepcion del logo de Apple en la entrada,
- Ese fue creado con blender para el proyecto.
+ El proyecto esta realizado con THREE.JS y con algunos modelos obtenidos de internet, a excepcion del logo de Apple en la entrada.
+ Ese fue creado con Blender para el proyecto.
 
  Modelo del iMac de la pagina:
  https://www.modelplusmodel.com/tech/electronics/f18-desktop-computer.html
@@ -33,8 +33,6 @@
  apple:
  https://www.google.com/url?sa=i&url=https%3A%2F%2Ffondos.wallpaperstock.net%2Fsimple-white-de-apple-wallpapers_w44562.html&psig=AOvVaw2TQOzNRWf2HUO4gJbMiQ8V&ust=1612213286783000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCOC599aIx-4CFQAAAAAdAAAAABAD
 
-
-
  */
 
 
@@ -63,36 +61,39 @@ document.body.appendChild(renderer.domElement);
 //renderer.shadowMap.enabled = true;
 RectAreaLightUniformsLib.init();
 
-
 const stats = Stats();
 document.body.appendChild(stats.dom);
-
-
 const exterior = new THREE.Object3D();
 var clock = new THREE.Clock();
 
+
 // Apple Logo
 var appleLogo;
+var appleLogoAnim;
 var emission = [0xffffff, 0x7d7d7d, 0x000000];
 
 // Para la animacion de cambiar el glow de logo en el render
 function update(){
+	// console.log("Actualizando logo");
 	var delta = clock.getDelta();
-	// appleLogo.update( 1000 * delta );
+	appleLogoAnim.update( 1000 * delta );
 }
 
-function emissionAnimation(emission, numEm, emDuration){
+function EmissionAnimation(object, emission, numEm, emDuration){
 	this.emDisplayDuration = emDuration;
 	this.currentDisplayTime = 0;
 	this.currentEm = 0;
 	this.numberOfEm = numEm;
 
 	this.update = function( milliSec ){
+		// console.log("TIEMPO " , this.currentDisplayTime);
 		this.currentDisplayTime += milliSec;
 		
 		while( this.currentDisplayTime > this.emDisplayDuration ){
 			this.currentDisplayTime -= this.emDisplayDuration;
 			this.currentEm++;
+			object.material.emissive = new THREE.Color( emission[this.currentEm] );
+			console.log(object.material.emissive);
 			
 			if ( this.currentEm == this.numberOfEm){
 				this.currentEm = 0;
@@ -118,10 +119,12 @@ loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
     // Agregando valor emissive incial para la animacion (para que parezca que emite luz)
 	appleLogo.traverse( function( object ){
 		if (( object instanceof THREE.Mesh)){
-			object.material.emissive = new THREE.Color( emission[1] );
+			object.material.emissive = new THREE.Color( emission[0] );
 			object.material.emissive.Intensity = 1.5;
+			appleLogoAnim = new EmissionAnimation(object, emission, 3, 1000);
 		}
 	});
+
 
     scene.add( appleLogo );
 
@@ -543,12 +546,13 @@ var animate = function () {
     requestAnimationFrame(animate);
    //controls.update();
 
-   // update();
    compuQueRota.rotation.y += 0.01;
     render();
     stats.update();
+    update();
 };
 
-
+console.log("Comenzando ejecucion...");
 animate();
+// update();
 
