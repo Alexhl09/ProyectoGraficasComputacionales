@@ -73,9 +73,9 @@ var appleLogoAnim;
 var emission = [0xffffff, 0x7d7d7d, 0x000000];
 
 // Para la animacion de cambiar el glow de logo en el render
-function update(){
+function update(delta){
 	// console.log("Actualizando logo");
-	var delta = clock.getDelta();
+	// var delta = clock.getDelta();
 	appleLogoAnim.update( 1000 * delta );
 }
 
@@ -93,7 +93,7 @@ function EmissionAnimation(object, emission, numEm, emDuration){
 			this.currentDisplayTime -= this.emDisplayDuration;
 			this.currentEm++;
 			object.material.emissive = new THREE.Color( emission[this.currentEm] );
-			console.log(object.material.emissive);
+			// console.log(object.material.emissive);
 			
 			if ( this.currentEm == this.numberOfEm){
 				this.currentEm = 0;
@@ -525,10 +525,12 @@ var stepy = 0
 
 // var clock = new THREE.Clock();
 
+
 function render() {
     step += 0.005
     stepy += 0.00005
     var delta = clock.getDelta();
+    update(delta);
     cameraControllsFirstPerson.update(delta);
     renderer.render(scene, camera);
 }
@@ -549,10 +551,9 @@ var animate = function () {
    compuQueRota.rotation.y += 0.01;
     render();
     stats.update();
-    update();
+    // update();
 };
 
 console.log("Comenzando ejecucion...");
 animate();
-// update();
 
