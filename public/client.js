@@ -69,12 +69,42 @@ document.body.appendChild(stats.dom);
 
 
 const exterior = new THREE.Object3D();
+var clock = new THREE.Clock();
+var appleLogo;
 
 
 // Apple Logo
+// Para la animacion de cambiar el glow de logo en el render
+function update(){
+	var delta = clock.getDelta();
+	// appleLogo.update( 1000 * delta );
+}
+
+function emissionAnimation(emission, numEm, emDuration){
+	this.emDisplayDuration = emDuration;
+	this.currentDisplayTime = 0;
+	this.currentEm = 0;
+	this.numberOfEm = numEm;
+
+	this.update = function( milliSec ){
+		this.currentDisplayTime += milliSec;
+		
+		while( this.currentDisplayTime > this.emDisplayDuration ){
+			this.currentDisplayTime -= this.emDisplayDuration;
+			this.currentEm++;
+			
+			if ( this.currentEm == this.numberOfEm){
+				this.currentEm = 0;
+			}
+		}
+	};
+}
+
 const loader = new GLTFLoader();
+var emission = [0xffffff, 0x7d7d7d, 0x000000];
 
 loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
+
 
     gltf.scene.rotation.x = -Math.PI / 2;
     gltf.scene.rotation.y = Math.PI / 2;
@@ -84,14 +114,20 @@ loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
     gltf.scene.position.y = 15;
     gltf.scene.position.z = -50;
 
+	gltf.scene.traverse( function( object ){
+		if (( object instanceof THREE.Mesh)){
+			object.material.emissive = new THREE.Color( emission[1] );
+		}
+	});
+
     scene.add( gltf.scene );
 
     // Hacer que parezca que emite luz como una lampara
-    const light = new THREE.PointLight( 0xFFFFFF, 2, 20);
-    // const light = new THREE.PointLight( 0xff0000, 2, 20 );
-    light.position.set( gltf.scene.position.x , gltf.scene.position.y, gltf.scene.position.z );
+    // const light = new THREE.PointLight( 0x7d7d7d, 5, 20, 2);
+    // const light = new THREE.PointLight( 0xff0000, 5, 20, 2 );
+    // light.position.set( gltf.scene.position.x , gltf.scene.position.y, gltf.scene.position.z );
 
-    scene.add( light );
+    // scene.add( light );
 
 }, undefined, function ( error ) {
     console.log("Error cargando logo");
@@ -488,7 +524,7 @@ cameraControllsFirstPerson.movementSpeed = 10;
 var step = 0
 var stepy = 0
 
-var clock = new THREE.Clock();
+// var clock = new THREE.Clock();
 
 function render() {
     step += 0.005
@@ -511,7 +547,7 @@ var animate = function () {
     requestAnimationFrame(animate);
    //controls.update();
 
-   
+   // update();
    compuQueRota.rotation.y += 0.01;
     render();
     stats.update();
