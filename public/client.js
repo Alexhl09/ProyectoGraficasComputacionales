@@ -70,15 +70,20 @@ var clock = new THREE.Clock();
 // Apple Logo
 var appleLogo;
 var appleLogoAnim;
-var emission = [0xffffff, 0x7d7d7d, 0x000000];
+// var emission = [0xffffff, 0x7d7d7d, 0x000000];
+var emission = [ 0xffffff, 0xf2f2f2 , 0xe5e5e5 , 0xd8d8d8 , 
+	0xcccccc , 0xbfbfbf , 0xb2b2b2 , 0xa6a6a6 , 
+	0x999999 , 0x8c8c8c , 0x808080 , 0x737373 ,
+	0x666666 , 0x595959 , 0x4c4c4c , 0x404040 , 
+	0x333333 , 0x262626 , 0x191919 , 0x0c0c0c ,
+	0x000000];
 
 // Para la animacion de cambiar el glow de logo en el render
 function update(delta){
-	// console.log("Actualizando logo");
-	// var delta = clock.getDelta();
 	appleLogoAnim.update( 1000 * delta );
 }
 
+// Con esto cambiamos entre los diferentes colores de blanco a negro, para darle una transicion mas smooth
 function EmissionAnimation(object, emission, numEm, emDuration){
 	this.emDisplayDuration = emDuration;
 	this.currentDisplayTime = 0;
@@ -86,14 +91,12 @@ function EmissionAnimation(object, emission, numEm, emDuration){
 	this.numberOfEm = numEm;
 
 	this.update = function( milliSec ){
-		// console.log("TIEMPO " , this.currentDisplayTime);
 		this.currentDisplayTime += milliSec;
 		
 		while( this.currentDisplayTime > this.emDisplayDuration ){
 			this.currentDisplayTime -= this.emDisplayDuration;
 			this.currentEm++;
 			object.material.emissive = new THREE.Color( emission[this.currentEm] );
-			// console.log(object.material.emissive);
 			
 			if ( this.currentEm == this.numberOfEm){
 				this.currentEm = 0;
@@ -103,7 +106,7 @@ function EmissionAnimation(object, emission, numEm, emDuration){
 }
 
 const loader = new GLTFLoader();
-
+// Cargando modelo de blender
 loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
 
 	appleLogo = gltf.scene;
@@ -121,7 +124,7 @@ loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
 		if (( object instanceof THREE.Mesh)){
 			object.material.emissive = new THREE.Color( emission[0] );
 			object.material.emissive.Intensity = 1.5;
-			appleLogoAnim = new EmissionAnimation(object, emission, 3, 1000);
+			appleLogoAnim = new EmissionAnimation( object , emission , 21 , 100);
 		}
 	});
 
