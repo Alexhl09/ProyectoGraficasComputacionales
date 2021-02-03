@@ -89,17 +89,27 @@ function EmissionAnimation(object, emission, numEm, emDuration){
 	this.currentDisplayTime = 0;
 	this.currentEm = 0;
 	this.numberOfEm = numEm;
+	this.dirAni = true;
 
+	object.material.emissive.Intensity = 1.5;
+	
 	this.update = function( milliSec ){
 		this.currentDisplayTime += milliSec;
 		
 		while( this.currentDisplayTime > this.emDisplayDuration ){
 			this.currentDisplayTime -= this.emDisplayDuration;
-			this.currentEm++;
+			if( this.dirAni ){
+				this.currentEm++;
+			}else{
+				this.currentEm--;
+			}
+			
 			object.material.emissive = new THREE.Color( emission[this.currentEm] );
 			
-			if ( this.currentEm == this.numberOfEm){
-				this.currentEm = 0;
+			if ( this.currentEm == this.numberOfEm - 1){
+				this.dirAni = false;
+			} else if ( this.currentEm == 0 ){
+				this.dirAni = true;
 			}
 		}
 	};
@@ -122,9 +132,9 @@ loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
     // Agregando valor emissive incial para la animacion (para que parezca que emite luz)
 	appleLogo.traverse( function( object ){
 		if (( object instanceof THREE.Mesh)){
-			object.material.emissive = new THREE.Color( emission[0] );
-			object.material.emissive.Intensity = 1.5;
-			appleLogoAnim = new EmissionAnimation( object , emission , 21 , 100);
+			// object.material.emissive = new THREE.Color( emission[0] );
+			// object.material.emissive.Intensity = 1.5;
+			appleLogoAnim = new EmissionAnimation( object , emission , 21 , 110 );
 		}
 	});
 
