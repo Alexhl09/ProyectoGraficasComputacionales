@@ -70,10 +70,11 @@ document.body.appendChild(stats.dom);
 
 const exterior = new THREE.Object3D();
 var clock = new THREE.Clock();
-var appleLogo;
-
 
 // Apple Logo
+var appleLogo;
+var emission = [0xffffff, 0x7d7d7d, 0x000000];
+
 // Para la animacion de cambiar el glow de logo en el render
 function update(){
 	var delta = clock.getDelta();
@@ -101,33 +102,28 @@ function emissionAnimation(emission, numEm, emDuration){
 }
 
 const loader = new GLTFLoader();
-var emission = [0xffffff, 0x7d7d7d, 0x000000];
 
 loader.load( '/models/apple_logo/apple_logo.glb', function ( gltf ) {
 
+	appleLogo = gltf.scene;
 
-    gltf.scene.rotation.x = -Math.PI / 2;
-    gltf.scene.rotation.y = Math.PI / 2;
+    appleLogo.rotation.x = -Math.PI / 2;
+    appleLogo.rotation.y = Math.PI / 2;
 
     // Centrando modelo en la entrada
-    gltf.scene.position.x = -0.5;
-    gltf.scene.position.y = 15;
-    gltf.scene.position.z = -50;
+   	appleLogo.position.x = -0.5;
+    appleLogo.position.y = 15;
+    appleLogo.position.z = -50;
 
-	gltf.scene.traverse( function( object ){
+    // Agregando valor emissive incial para la animacion (para que parezca que emite luz)
+	appleLogo.traverse( function( object ){
 		if (( object instanceof THREE.Mesh)){
 			object.material.emissive = new THREE.Color( emission[1] );
+			object.material.emissive.Intensity = 1.5;
 		}
 	});
 
-    scene.add( gltf.scene );
-
-    // Hacer que parezca que emite luz como una lampara
-    // const light = new THREE.PointLight( 0x7d7d7d, 5, 20, 2);
-    // const light = new THREE.PointLight( 0xff0000, 5, 20, 2 );
-    // light.position.set( gltf.scene.position.x , gltf.scene.position.y, gltf.scene.position.z );
-
-    // scene.add( light );
+    scene.add( appleLogo );
 
 }, undefined, function ( error ) {
     console.log("Error cargando logo");
